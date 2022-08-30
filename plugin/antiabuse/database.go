@@ -27,6 +27,9 @@ func deleteUser(gid, uid int64) error {
 func recoverUser() error {
 	obj := &banUser{}
 	var uuids []string
+	if !db.CanFind("banUser", "") {
+		return nil
+	}
 	err := db.FindFor("banUser", obj, "", func() error {
 		if time.Now().UnixNano() < obj.DueTime {
 			uuids = append(uuids, obj.UUID)
@@ -62,6 +65,9 @@ func deleteWord(gid int64, word string) error {
 func recoverWord() error {
 	obj := &banWord{}
 	var groupWords []string
+	if !db.CanFind("banWord", "") {
+		return nil
+	}
 	err := db.FindFor("banWord", obj, "", func() error {
 		groupWords = append(groupWords, obj.GroupWord)
 		return nil
